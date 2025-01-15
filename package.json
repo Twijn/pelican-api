@@ -1,0 +1,31 @@
+{
+  "name": "pelican-api",
+  "version": "1.0.0",
+  "description": "API Wrapper for the Pelican panel at https://pelican.dev",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Twijn/pelican-api.git"
+  },
+  "keywords": [
+    "pelican",
+    "api",
+    "wrapper"
+  ],
+  "author": "Twijn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Twijn/pelican-api/issues"
+  },
+  "homepage": "https://github.com/Twijn/pelican-api#readme",
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.10.6",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.7.3"
+  }
+}
