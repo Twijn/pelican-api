@@ -1,7 +1,15 @@
 import {User} from "../../src/types/users";
 import PelicanAPI from "../../src";
 
-const api = new PelicanAPI("https://pelican.twijn.dev/api", "peli_8V5RkpCNZ026xotK6ekEToHzs7xETCMTrc67woklrQ0");
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.test" });
+
+if (!process?.env?.URL || !process?.env?.API_KEY) {
+    console.error("missing environment variable");
+    process.exit(1);
+}
+
+const api = new PelicanAPI(process.env.URL, process.env.API_KEY);
 
 describe("test base GET endpoints", () => {
     test("get all users", async () => {

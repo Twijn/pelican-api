@@ -1,15 +1,23 @@
 import PelicanAPI from "../../src";
 
-const api = new PelicanAPI("https://pelican.twijn.dev/api", "peli_8V5RkpCNZ026xotK6ekEToHzs7xETCMTrc67woklrQ0");
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.test" });
+
+if (!process?.env?.URL || !process?.env?.API_KEY) {
+    console.error("missing environment variable");
+    process.exit(1);
+}
+
+const api = new PelicanAPI(process.env.URL, process.env.API_KEY);
+const fakeApi = new PelicanAPI(process.env.URL, "fake");
 
 describe("check application connection", () => {
-    const falseApi = new PelicanAPI("https://pelican.twijn.dev/api", "fake");
 
     test("can connect to API", async () => {
         await expect(api.application.test()).resolves.toBeUndefined();
     });
 
     test("can't connect with fake API credentials", async () => {
-        await expect(falseApi.application.test()).rejects.toBeDefined(); // TODO: Improve error handling
+        await expect(fakeApi.application.test()).rejects.toBeDefined(); // TODO: Improve error handling
     });
 });
