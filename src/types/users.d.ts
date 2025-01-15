@@ -1,3 +1,5 @@
+import {Language, Timezone} from "types";
+
 export interface User {
     id: number;
     external_id: string|null;
@@ -9,25 +11,25 @@ export interface User {
     language: string;
     root_admin: boolean;
     "2fa": boolean;
+    "2fa_enabled": boolean;
     created_at: string;
     updated_at: string;
 }
 
 export interface UserCreateOptions {
+    email: string;
     external_id?: string;
     username: string;
-    email: string;
-    first_name: string;
-    last_name: string;
     password?: string;
+    language?: Language;
+    timezone?: Timezone;
 }
 
 export interface UserEditOptions {
+    email?: string;
     external_id?: string;
     username?: string;
-    email?: string;
-    first_name?: string;
-    last_name?: string;
     password?: string;
-    language?: string;
+    language?: Language;
+    timezone?: Timezone;
 }

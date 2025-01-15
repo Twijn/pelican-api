@@ -24,14 +24,15 @@ describe("test base GET endpoints", () => {
 let createdUser: User;
 
 describe("test user endpoints", () => {
+
     beforeAll(async () => {
-        createdUser = await api.application.users.createUser({
+        createdUser = await api.application.users.create({
             external_id: "pelicanapi_test",
             username: "johndoe",
-            first_name: "John",
-            last_name: "Doe",
             email: "john@example.com",
             password: "12345678",
+            language: "af",
+            timezone: "Africa/Abidjan",
         });
         console.log(`Created user ${createdUser?.id}`);
     });
@@ -41,14 +42,13 @@ describe("test user endpoints", () => {
     });
 
     test("update created user", async () => {
-        await expect(api.application.users.updateUser(createdUser.id, {
+        await expect(api.application.users.update(createdUser.id, {
             external_id: "pelicanapi_test2",
             username: "janesmith",
-            first_name: "Jane",
-            last_name: "Smith",
             email: "jane@example.com",
             password: "12345678!",
-            language: "en",
+            timezone: "Africa/Banjul",
+            language: "es",
         })).resolves.toHaveProperty("username", "janesmith");
     });
 
@@ -60,7 +60,7 @@ describe("test user endpoints", () => {
     afterAll(async () => {
         if (!createdUser?.id) return;
 
-        await api.application.users.deleteUser(createdUser.id);
+        await api.application.users.delete(createdUser.id);
     });
 
 });
