@@ -56,6 +56,18 @@ describe("test node endpoints", () => {
         await expect(createdNode.getConfiguration()).resolves.toHaveProperty("uuid");
     });
 
+    test("create new allocation on created node", async () => {
+        await expect(createdNode.createAllocation({ ip: "172.30.0.1", ports: ["1111"]})).resolves.toBeUndefined();
+    });
+
+    test("get allocations on created node", async () => {
+        await expect(createdNode.getAllocations()).resolves.toHaveLength(1);
+    });
+
+    test("add tags to created node", async () => {
+        await expect(createdNode.addTags(["test-tag-add"])).resolves.toHaveProperty("tags", ["test-tag-add"]);
+    });
+
     // test("update created node", async () => {
     //     await expect(createdNode.update({
     //         name: "new-name",

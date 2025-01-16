@@ -108,3 +108,18 @@ export interface NodeEditOptions {
     daemon_sftp_alias?: string|null;
     tags?: string[]|null;
 }
+
+export interface IAllocation {
+    id: number;
+    ip: string;
+    alias: string|null;
+    port: number;
+    notes: string;
+    assigned: boolean;
+}
+
+export interface AllocationCreateOptions {
+    ip: string;
+    alias?: string|null;
+    ports: string[];
+}

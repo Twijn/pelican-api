@@ -1,6 +1,7 @@
 import {Scheme} from "types";
-import {AllocatedResources, INode, NodeConfiguration, NodeEditOptions} from "nodes";
+import {AllocatedResources, AllocationCreateOptions, INode, NodeConfiguration, NodeEditOptions} from "nodes";
 import PelicanAPI from "../index";
+import {Allocation} from "./Allocation";
 
 export class Node {
     private api: PelicanAPI;
@@ -101,24 +102,16 @@ export class Node {
         const newOptions: NodeEditOptions = {
             ...{
                 name: this._name,
-                description: this._description,
-                public: this._public,
                 fqdn: this._fqdn,
                 scheme: this._scheme,
-                behind_proxy: this._behind_proxy,
-                maintenance_mode: this._maintenance_mode,
                 memory: this._memory,
                 memory_overallocate: this._memory_overallocate,
                 disk: this._disk,
                 disk_overallocate: this._disk_overallocate,
                 cpu: this._cpu,
                 cpu_overallocate: this._cpu_overallocate,
-                daemon_base: this._daemon_base,
-                upload_size: this._upload_size,
                 daemon_listen: this._daemon_listen,
                 daemon_sftp: this._daemon_sftp,
-                daemon_sftp_alias: this._daemon_sftp_alias,
-                tags: this._tags,
             },
             ...options,
         }
@@ -148,6 +141,18 @@ export class Node {
                 reject(error);
             });
         });
+    }
+
+    createAllocation(options: AllocationCreateOptions) {
+        return this.api.application.nodes.createAllocation(this._id, options);
+    }
+
+    getAllocations(): Promise<Allocation[]> {
+        return this.api.application.nodes.getAllocations(this._id);
+    }
+
+    getAllocation(allocationId: string|number): Promise<Allocation> {
+        return this.api.application.nodes.getAllocation(this._id, allocationId);
     }
 
     addTags(tags: string[]): Promise<Node> {

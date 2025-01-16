@@ -1,7 +1,15 @@
 import PelicanAPI from "../index";
 
 import {Node} from "../models/Node";
-import {INode, NodeConfiguration, NodeCreateOptions, NodeEditOptions} from "nodes";
+import {Allocation} from "../models/Allocation";
+import {
+    AllocationCreateOptions,
+    IAllocation,
+    INode,
+    NodeConfiguration,
+    NodeCreateOptions,
+    NodeEditOptions
+} from "nodes";
 
 export default class ApplicationNodeAPI {
 
@@ -73,6 +81,48 @@ export default class ApplicationNodeAPI {
             }, error => {
                 reject(error);
             })
+        });
+    }
+
+    createAllocation(nodeId: string|number, options: AllocationCreateOptions): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/nodes/${encodeURIComponent(nodeId)}/allocations`, "POST", options).then(() => {
+                resolve();
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
+    getAllocations(nodeId: string|number): Promise<Allocation[]> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/nodes/${encodeURIComponent(nodeId)}/allocations`).then(result => {
+                const allocations = result.data.map((x: any) => new Allocation(x.attributes as IAllocation, nodeId, this.api));
+                resolve(allocations);
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
+    getAllocation(nodeId: string|number, allocationId: string|number): Promise<Allocation> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/nodes/${encodeURIComponent(nodeId)}/allocations/${encodeURIComponent(allocationId)}`).then(result => {
+                const allocations = new Allocation(result.data.attributes as IAllocation, nodeId, this.api);
+                resolve(allocations);
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
+    deleteAllocation(nodeId: string|number, allocationId: string|number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/nodes/${encodeURIComponent(nodeId)}/allocations/${encodeURIComponent(allocationId)}`, "DELETE").then(result => {
+                resolve();
+            }, error => {
+                reject(error);
+            });
         });
     }
 
