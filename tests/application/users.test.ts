@@ -1,4 +1,4 @@
-import {User} from "../../src/types/users";
+import {User} from "../../src/models/User";
 import PelicanAPI from "../../src";
 
 import dotenv from "dotenv";
@@ -37,24 +37,28 @@ describe("test user endpoints", () => {
         console.log(`Created user ${createdUser?.id}`);
     });
 
+    test("check if mock user created", async () => {
+        expect(createdUser).toHaveProperty("id");
+        expect(createdUser.username).toBe("johndoe");
+    });
+
     test("get user with external_id = pelicanapi_test", async () => {
         await expect(api.application.users.getByExternalId("pelicanapi_test")).resolves.toHaveProperty("id", createdUser.id);
     });
 
     test("update created user", async () => {
-        await expect(api.application.users.update(createdUser.id, {
+        const updateUser = createdUser.update({
             external_id: "pelicanapi_test2",
             username: "janesmith",
             email: "jane@example.com",
             password: "12345678!",
             timezone: "Africa/Banjul",
             language: "es",
-        })).resolves.toHaveProperty("username", "janesmith");
-    });
+        });
 
-    test("check if mock user created", async () => {
-        expect(createdUser).toHaveProperty("id");
-        expect(createdUser.username).toBe("johndoe");
+        await expect(updateUser).resolves.toHaveProperty("username", "janesmith");
+        await expect(updateUser).resolves.toHaveProperty("email", "jane@example.com");
+        await expect(updateUser).resolves.toHaveProperty("language", "es");
     });
 
     afterAll(async () => {

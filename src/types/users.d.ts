@@ -1,14 +1,12 @@
 import {Language, Timezone} from "types";
 
-export interface User {
+export interface IUser {
     id: number;
     external_id: string|null;
     uuid: string;
     username: string;
     email: string;
-    first_name: string;
-    last_name: string;
-    language: string;
+    language: Language;
     root_admin: boolean;
     "2fa": boolean;
     "2fa_enabled": boolean;
@@ -26,9 +24,9 @@ export interface UserCreateOptions {
 }
 
 export interface UserEditOptions {
-    email?: string;
+    email: string;
     external_id?: string;
-    username?: string;
+    username: string;
     password?: string;
     language?: Language;
     timezone?: Timezone;

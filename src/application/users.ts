@@ -1,6 +1,7 @@
 import PelicanAPI from "../index";
 
-import {User, UserCreateOptions, UserEditOptions} from "users";
+import {IUser, UserCreateOptions, UserEditOptions} from "users";
+import {User} from "../models/User";
 
 export default class ApplicationUserAPI {
 
@@ -13,7 +14,7 @@ export default class ApplicationUserAPI {
     getAll(): Promise<User[]> {
         return new Promise((resolve, reject) => {
             this.api.call("/application/users").then(result => {
-                const users: User[] = result.data.map((user: any) => user.attributes as User);
+                const users: User[] = result.data.map((user: any) => new User(user.attributes as IUser, this.api));
                 resolve(users);
             }, error => {
                 reject(error);
@@ -24,7 +25,7 @@ export default class ApplicationUserAPI {
     getById(id: string|number): Promise<User> {
         return new Promise((resolve, reject) => {
             this.api.call(`/application/users/${encodeURIComponent(id)}`).then(result => {
-                resolve(result.data.attributes as User);
+                resolve(new User(result.data.attributes as IUser, this.api));
             }, error => {
                 reject(error);
             });
@@ -34,7 +35,7 @@ export default class ApplicationUserAPI {
     getByExternalId(externalId: string): Promise<User> {
         return new Promise((resolve, reject) => {
             this.api.call(`/application/users/external/${encodeURIComponent(externalId)}`).then(result => {
-                resolve(result.data.attributes as User);
+                resolve(new User(result.data.attributes as IUser, this.api));
             }, error => {
                 reject(error);
             });
@@ -44,17 +45,17 @@ export default class ApplicationUserAPI {
     create(options: UserCreateOptions): Promise<User> {
         return new Promise((resolve, reject) => {
             this.api.call("/application/users", "POST", options).then(result => {
-                resolve(result.data.attributes as User);
+                resolve(new User(result.data.attributes as IUser, this.api));
             }, error => {
                 reject(error);
             });
         });
     }
 
-    update(id: string|number, options: UserEditOptions): Promise<User> {
+    update(id: string|number, options: UserEditOptions): Promise<IUser> {
         return new Promise((resolve, reject) => {
             this.api.call(`/application/users/${encodeURIComponent(id)}`, "PATCH", options).then(result => {
-                resolve(result.data.attributes as User);
+                resolve(result.data.attributes as IUser);
             }, error => {
                 reject(error);
             });
