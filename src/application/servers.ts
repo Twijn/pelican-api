@@ -7,6 +7,8 @@ import {
     ServerEditStartup, ServerTransferOptions
 } from "server";
 import {Server} from "../models/Server";
+import {ServerDatabase} from "../models/ServerDatabase";
+import {IServerDatabase, ServerDatabaseCreateOptions} from "serverdatabases";
 
 export default class ApplicationServerAPI {
 
@@ -145,6 +147,57 @@ export default class ApplicationServerAPI {
     delete(id: string|number, force: boolean = false): Promise<void> {
         return new Promise((resolve, reject) => {
             this.api.call(`/application/servers/${encodeURIComponent(id)}${force ? "/force" : ""}`, "DELETE").then(result => {
+                resolve();
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
+    getAllDatabases(serverId: string|number): Promise<ServerDatabase[]> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/servers/${encodeURIComponent(serverId)}/databases`).then(result => {
+                const databases = result.data.map((x: any) => new ServerDatabase(x as IServerDatabase, this.api));
+                resolve(databases);
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
+    getDatabaseById(serverId: string|number, databaseId: string|number): Promise<ServerDatabase> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/servers/${encodeURIComponent(serverId)}/databases/${encodeURIComponent(databaseId)}`).then(result => {
+                resolve(new ServerDatabase(result.data.attributes as IServerDatabase, this.api));
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
+    createDatabase(serverId: string|number, options: ServerDatabaseCreateOptions): Promise<ServerDatabase> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/servers/${encodeURIComponent(serverId)}/databases`, "POST", options).then(result => {
+                resolve(new ServerDatabase(result.data.attributes as IServerDatabase, this.api));
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
+    deleteDatabase(serverId: string|number, databaseId: string|number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/servers/${encodeURIComponent(serverId)}/databases/${encodeURIComponent(databaseId)}`, "DELETE").then(() => {
+                resolve();
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
+    resetDatabasePassword(serverId: string|number, databaseId: string|number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/servers/${encodeURIComponent(serverId)}/databases/${encodeURIComponent(databaseId)}/reset-password`, "POST").then(() => {
                 resolve();
             }, error => {
                 reject(error);

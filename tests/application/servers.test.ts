@@ -9,11 +9,13 @@ if (!process?.env?.URL || !process?.env?.API_KEY || !process?.env?.DEDICATED_IP)
 }
 
 import { Server } from "../../src/models/Server";
+import { ServerDatabase } from "../../src/models/ServerDatabase";
 
 const api = new PelicanAPI(process.env.URL, { applicationApiKey: process.env.API_KEY });
 const DEDICATED_IP: string = process.env.DEDICATED_IP;
 
 let createdServer: Server;
+let createdDatabase: ServerDatabase;
 
 describe("test server endpoints", () => {
 
@@ -25,7 +27,7 @@ describe("test server endpoints", () => {
                 VANILLA_VERSION: "latest",
             },
             feature_limits: {
-                databases: 0,
+                databases: 1,
                 backups: 1,
                 allocations: 0,
             },
@@ -42,6 +44,12 @@ describe("test server endpoints", () => {
             allocation: {
                 default: "3",
             },
+        });
+
+        createdDatabase = await createdServer.createDatabase({
+            database: "test-db",
+            remote: "%",
+            host: 1,
         });
 
         console.log(`Created server with id ${createdServer.id}`);
@@ -113,7 +121,31 @@ describe("test server endpoints", () => {
         await expect(api.application.servers.getByExternalId("external-test")).resolves.toHaveProperty("external_id", "external-test");
     });
 
+    test("check server database created", () => {
+        expect(createdDatabase).toBeDefined();
+        expect(createdDatabase).toHaveProperty("server", createdServer.id);
+    });
+
+    test("check server database getServer", async () => {
+        const getServer = createdDatabase.getServer();
+
+        await expect(getServer).resolves.toBeDefined();
+        await expect(getServer).resolves.toHaveProperty("id", createdServer.id);
+    })
+
+    test("check server database getHost", async () => {
+        const getHost = createdDatabase.getHost();
+
+        await expect(getHost).resolves.toBeDefined();
+        await expect(getHost).resolves.toHaveProperty("id", createdDatabase.host);
+    });
+
+    test("check server database resetPassword", async () => {
+        await expect(createdDatabase.resetPassword()).resolves.toBeUndefined();
+    });
+
     afterAll(async () => {
+        await createdDatabase.delete();
         await createdServer.delete();
     });
 

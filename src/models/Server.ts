@@ -1,4 +1,5 @@
 import PelicanAPI from "../index";
+
 import {
     IServer,
     ServerContainer,
@@ -8,6 +9,8 @@ import {
     ServerFeatureLimits,
     ServerLimits, ServerTransferOptions
 } from "server";
+import {ServerDatabaseCreateOptions} from "serverdatabases";
+import {ServerDatabase} from "./ServerDatabase";
 
 
 
@@ -201,6 +204,18 @@ export class Server {
 
     stopTransfer(): Promise<void> {
         return this.api.application.servers.stopTransfer(this._id);
+    }
+
+    createDatabase(options: ServerDatabaseCreateOptions): Promise<ServerDatabase> {
+        return this.api.application.servers.createDatabase(this._id, options);
+    }
+
+    getAllDatabases(): Promise<ServerDatabase[]> {
+        return this.api.application.servers.getAllDatabases(this._id);
+    }
+
+    getDatabaseById(databaseId: string|number) {
+        return this.api.application.servers.getDatabaseById(this._id, databaseId);
     }
 
 }
