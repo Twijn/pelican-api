@@ -8,7 +8,7 @@ if (!process?.env?.URL || !process?.env?.API_KEY) {
     process.exit(1);
 }
 
-import { Node } from "../../src/types/nodes";
+import { Node } from "../../src/models/Node";
 
 const api = new PelicanAPI(process.env.URL, process.env.API_KEY);
 
@@ -39,6 +39,11 @@ describe("test node endpoints", () => {
         console.log(`Created node ${createdNode.id}`);
     });
 
+    test("check if created server exists", () => {
+        expect(createdNode).toHaveProperty("id");
+        expect(createdNode.name).toBe("test-node");
+    });
+
     test("get all nodes", async () => {
         await expect(api.application.nodes.getAll()).resolves.toBeDefined();
     });
@@ -47,28 +52,13 @@ describe("test node endpoints", () => {
         await expect(api.application.nodes.getById(1)).resolves.toHaveProperty("id", 1);
     });
 
-    test("get node configuration of id = 1", async () => {
-        await expect(api.application.nodes.getConfiguration(1)).resolves.toHaveProperty("uuid");
+    test("get node configuration of created node", async () => {
+        await expect(createdNode.getConfiguration()).resolves.toHaveProperty("uuid");
     });
 
     // test("update created node", async () => {
-    //     await expect(api.application.nodes.update(createdNode.id, {
-    //         public: true,
-    //         maintenance_mode: false,
-    //         cpu: 100,
-    //         cpu_overallocate: 0,
-    //         memory: 1024,
-    //         memory_overallocate: 0,
-    //         disk: 2048,
-    //         disk_overallocate: 0,
-    //         upload_size: 512,
-    //         daemon_base: "/var/lib/pelican/new-volumes",
-    //         daemon_listen: 8080,
-    //         daemon_sftp: 2122,
-    //         fqdn: "newpelican.example.com",
-    //         daemon_sftp_alias: "alias.newpelican.example.com",
+    //     await expect(createdNode.update({
     //         name: "new-name",
-    //         scheme: "https"
     //     })).resolves.toHaveProperty("name", "new-name");
     // });
 

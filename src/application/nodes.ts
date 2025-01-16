@@ -1,6 +1,7 @@
 import PelicanAPI from "../index";
 
-import {Node, NodeConfiguration, NodeCreateOptions, NodeEditOptions} from "nodes";
+import {Node} from "../models/Node";
+import {INode, NodeConfiguration, NodeCreateOptions, NodeEditOptions} from "nodes";
 
 export default class ApplicationNodeAPI {
 
@@ -13,7 +14,7 @@ export default class ApplicationNodeAPI {
     getAll(): Promise<Node[]> {
         return new Promise((resolve, reject) => {
             this.api.call("/application/nodes").then(result => {
-                const nodes: Node[] = result.data.map((x: any) => x.attributes as Node);
+                const nodes: Node[] = result.data.map((x: any) => new Node(x.attributes as INode, this.api));
                 resolve(nodes);
             }, error => {
                 reject(error);
@@ -23,8 +24,8 @@ export default class ApplicationNodeAPI {
 
     getById(id: string|number): Promise<Node> {
         return new Promise((resolve, reject) => {
-           this.api.call(`/application/nodes/${id}`).then(result => {
-               const node = result.data.attributes as Node;
+           this.api.call(`/application/nodes/${encodeURIComponent(id)}`).then(result => {
+               const node = new Node(result.data.attributes as INode, this.api);
                resolve(node);
            }, error => {
                reject(error);
@@ -34,7 +35,7 @@ export default class ApplicationNodeAPI {
 
     getConfiguration(id: string|number): Promise<NodeConfiguration> {
         return new Promise((resolve, reject) => {
-            this.api.call(`/application/nodes/${id}/configuration`).then(result => {
+            this.api.call(`/application/nodes/${encodeURIComponent(id)}/configuration`).then(result => {
                 const nodeConfiguration = result.data as NodeConfiguration;
                 resolve(nodeConfiguration);
             }, error => {
@@ -46,7 +47,7 @@ export default class ApplicationNodeAPI {
     create(options: NodeCreateOptions): Promise<Node> {
         return new Promise((resolve, reject) => {
             this.api.call("/application/nodes", "POST", options).then(result => {
-                const node = result.data.attributes as Node;
+                const node = new Node(result.data.attributes as INode, this.api);
                 resolve(node);
             }, error => {
                 reject(error);
@@ -54,10 +55,10 @@ export default class ApplicationNodeAPI {
         });
     }
 
-    update(id: string|number, options: NodeEditOptions): Promise<Node> {
+    update(id: string|number, options: NodeEditOptions): Promise<INode> {
         return new Promise((resolve, reject) => {
-            this.api.call(`/application/nodes/${id}`, "PATCH", options).then(result => {
-                const node = result.data.attributes as Node;
+            this.api.call(`/application/nodes/${encodeURIComponent(id)}`, "PATCH", options).then(result => {
+                const node = result.data.attributes as INode;
                 resolve(node);
             }, error => {
                 reject(error);
@@ -67,7 +68,7 @@ export default class ApplicationNodeAPI {
 
     delete(id: string|number): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.api.call(`/application/nodes/${id}`, "DELETE").then(result => {
+            this.api.call(`/application/nodes/${encodeURIComponent(id)}`, "DELETE").then(result => {
                 resolve();
             }, error => {
                 reject(error);

@@ -6,14 +6,14 @@ export interface AllocatedResources {
     cpu: number;
 }
 
-export interface Node {
+export interface INode {
     id: number;
     uuid: string;
     public: boolean;
     name: string;
     description: string|null;
     fqdn: string;
-    scheme: "http"|"https";
+    scheme: Scheme;
     behind_proxy: boolean;
     maintenance_mode: boolean;
     memory: number;
@@ -89,7 +89,7 @@ export interface NodeCreateOptions {
 
 export interface NodeEditOptions {
     name: string;
-    description?: string;
+    description?: string|null;
     public?: boolean;
     fqdn: string;
     scheme: Scheme;
@@ -105,6 +105,6 @@ export interface NodeEditOptions {
     upload_size?: number;
     daemon_listen: number;
     daemon_sftp: number;
-    daemon_sftp_alias?: string;
-    tags?: string[];
+    daemon_sftp_alias?: string|null;
+    tags?: string[]|null;
 }
