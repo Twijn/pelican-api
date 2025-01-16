@@ -10,7 +10,7 @@ if (!process?.env?.URL || !process?.env?.API_KEY || !process?.env?.DEDICATED_IP)
 
 import { Server } from "../../src/models/Server";
 
-const api = new PelicanAPI(process.env.URL, process.env.API_KEY);
+const api = new PelicanAPI(process.env.URL, { applicationApiKey: process.env.API_KEY });
 const DEDICATED_IP: string = process.env.DEDICATED_IP;
 
 let createdServer: Server;

@@ -10,7 +10,7 @@ if (!process?.env?.URL || !process?.env?.API_KEY) {
 
 import { Node } from "../../src/models/Node";
 
-const api = new PelicanAPI(process.env.URL, process.env.API_KEY);
+const api = new PelicanAPI(process.env.URL, { applicationApiKey: process.env.API_KEY });
 
 let createdNode: Node;
 

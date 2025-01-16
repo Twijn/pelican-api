@@ -8,7 +8,7 @@ if (!process?.env?.URL || !process?.env?.API_KEY) {
     process.exit(1);
 }
 
-const api = new PelicanAPI(process.env.URL, process.env.API_KEY);
+const api = new PelicanAPI(process.env.URL, { applicationApiKey: process.env.API_KEY });
 
 describe("check egg endpoints", () => {
 
