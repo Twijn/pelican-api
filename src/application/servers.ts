@@ -38,6 +38,16 @@ export default class ApplicationServerAPI {
         });
     }
 
+    getByExternalId(externalId: string): Promise<Server> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/servers/external/${encodeURIComponent(externalId)}`).then(result => {
+                resolve(new Server(result.data.attributes as IServer, this.api));
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
     create(options: ServerCreateOptions): Promise<Server> {
         return new Promise((resolve, reject) => {
             this.api.call(`/application/servers`, "POST", options).then(result => {

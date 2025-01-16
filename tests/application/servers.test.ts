@@ -37,6 +37,7 @@ describe("test server endpoints", () => {
                 io: 500,
             },
             name: "wrapper-test",
+            external_id: "external-test",
             user: 1,
             allocation: {
                 default: "3",
@@ -106,6 +107,10 @@ describe("test server endpoints", () => {
 
     test("get server with id = 1", async () => {
         await expect(api.application.servers.getById(1)).resolves.toHaveProperty("id", 1);
+    });
+
+    test("get server with external id = 'external-test'", async () => {
+        await expect(api.application.servers.getByExternalId("external-test")).resolves.toHaveProperty("external_id", "external-test");
     });
 
     afterAll(async () => {
