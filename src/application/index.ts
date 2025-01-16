@@ -1,15 +1,21 @@
 import PelicanAPI from "../index";
 import ApplicationUserAPI from "./users";
+import ApplicationNodeAPI from "./nodes";
+import ApplicationServerAPI from "./servers";
 
 export default class ApplicationAPI {
 
     private api: PelicanAPI;
 
+    public nodes: ApplicationNodeAPI;
+    public servers: ApplicationServerAPI;
     public users: ApplicationUserAPI;
 
     constructor(api: PelicanAPI) {
         this.api = api;
 
+        this.nodes = new ApplicationNodeAPI(api);
+        this.servers = new ApplicationServerAPI(api);
         this.users = new ApplicationUserAPI(api);
     }
 
