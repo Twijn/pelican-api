@@ -182,7 +182,7 @@ export class Server {
 
     unsuspend(): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.api.application.servers.suspend(this._id).then(() => {
+            this.api.application.servers.unsuspend(this._id).then(() => {
                 this._suspended = false;
                 resolve();
             }, error => {
