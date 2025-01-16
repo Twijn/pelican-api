@@ -114,7 +114,7 @@ describe("test server endpoints", () => {
     });
 
     afterAll(async () => {
-        await api.application.servers.delete(createdServer.id);
+        await createdServer.delete();
     });
 
 });

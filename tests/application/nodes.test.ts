@@ -75,7 +75,7 @@ describe("test node endpoints", () => {
     // });
 
     afterAll(async () => {
-        await api.application.nodes.delete(createdNode.id);
+        await createdNode.delete();
     });
 
 });

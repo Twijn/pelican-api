@@ -64,7 +64,7 @@ describe("test user endpoints", () => {
     afterAll(async () => {
         if (!createdUser?.id) return;
 
-        await api.application.users.delete(createdUser.id);
+        await createdUser.delete();
     });
 
 });
