@@ -4,7 +4,7 @@ import {
     ServerCreateOptions,
     ServerEditBuild,
     ServerEditDetails,
-    ServerEditStartup
+    ServerEditStartup, ServerTransferOptions
 } from "server";
 import {Server} from "../models/Server";
 
@@ -115,6 +115,26 @@ export default class ApplicationServerAPI {
     reinstall(id: string|number): Promise<void> {
         return new Promise((resolve, reject) => {
             this.api.call(`/application/servers/${encodeURIComponent(id)}/reinstall`, "POST").then(result => {
+                resolve();
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
+    startTransfer(serverId: string|number, options: ServerTransferOptions): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/servers/${encodeURIComponent(serverId)}/transfer`, "POST", options).then(() => {
+                resolve();
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
+    stopTransfer(serverId: string|number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.api.call(`/application/servers/${encodeURIComponent(serverId)}/transfer/cancel`, "POST").then(() => {
                 resolve();
             }, error => {
                 reject(error);

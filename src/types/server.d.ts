@@ -100,3 +100,9 @@ export interface ServerEditStartup {
     image?: string;
     skip_scripts: boolean;
 }
+
+export interface ServerTransferOptions {
+    node_id: number;
+    allocation_id: number;
+    allocation_additional: string|null;
+}

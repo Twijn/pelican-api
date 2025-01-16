@@ -6,7 +6,7 @@ import {
     ServerEditDetails,
     ServerEditStartup,
     ServerFeatureLimits,
-    ServerLimits
+    ServerLimits, ServerTransferOptions
 } from "server";
 
 
@@ -193,6 +193,14 @@ export class Server {
 
     reinstall(): Promise<void> {
         return this.api.application.servers.reinstall(this._id);
+    }
+
+    startTransfer(options: ServerTransferOptions): Promise<void> {
+        return this.api.application.servers.startTransfer(this._id, options);
+    }
+
+    stopTransfer(): Promise<void> {
+        return this.api.application.servers.stopTransfer(this._id);
     }
 
 }
