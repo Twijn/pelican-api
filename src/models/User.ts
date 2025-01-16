@@ -69,7 +69,6 @@ export class User {
                 this._external_id = user.external_id;
                 this._username = user.username;
                 this._language = user.language;
-                console.log(user);
                 resolve(this);
             }, error => {
                 reject(error);
