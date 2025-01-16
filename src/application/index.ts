@@ -2,6 +2,7 @@ import PelicanAPI from "../index";
 
 import ApplicationEggAPI from "./eggs";
 import ApplicationNodeAPI from "./nodes";
+import ApplicationRoleAPI from "./roles";
 import ApplicationServerAPI from "./servers";
 import ApplicationUserAPI from "./users";
 
@@ -11,6 +12,7 @@ export default class ApplicationAPI {
 
     public eggs: ApplicationEggAPI;
     public nodes: ApplicationNodeAPI;
+    public roles: ApplicationRoleAPI;
     public servers: ApplicationServerAPI;
     public users: ApplicationUserAPI;
 
@@ -19,6 +21,7 @@ export default class ApplicationAPI {
 
         this.eggs = new ApplicationEggAPI(api);
         this.nodes = new ApplicationNodeAPI(api);
+        this.roles = new ApplicationRoleAPI(api);
         this.servers = new ApplicationServerAPI(api);
         this.users = new ApplicationUserAPI(api);
     }
